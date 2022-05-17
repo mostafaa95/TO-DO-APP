@@ -6,4 +6,6 @@ viewModel
 preferencedatastore
 mvvm
 animations
+dependency injection
+dagger - hilt
 dark theme and light theme
