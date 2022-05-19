@@ -30,7 +30,6 @@ import com.example.to_doapp.ui.theme.*
 import com.example.to_doapp.ui.viewmodels.SharedViewModel
 import com.example.to_doapp.util.Action
 import com.example.to_doapp.util.SearchAppBarState
-import com.example.to_doapp.util.TrailingIconState
 
 
 @Composable
@@ -45,7 +44,7 @@ fun ListAppBar(
                 onSearchClicked = {
                     sharedViewModel.searchAppBarState.value = SearchAppBarState.OPENED
                 },
-                onSortClicked = {sharedViewModel.persistSortState(it)},
+                onSortClicked = { sharedViewModel.persistSortState(it) },
                 onDeleteAllConfirmed = {
                     sharedViewModel.action.value = Action.DELETE_ALL
                 }
@@ -221,9 +220,7 @@ fun SearchAppBar(
     onCloseCLicked: () -> Unit,
     onSearchClicked: (String) -> Unit
 ) {
-    var trailingIconState by remember {
-        mutableStateOf(TrailingIconState.READY_TO_DELETE)
-    }
+
     androidx.compose.material.Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -265,22 +262,10 @@ fun SearchAppBar(
             },
             trailingIcon = {
                 IconButton(onClick = {
-                    if (text.isEmpty()) {
+                    if (text.isNotEmpty()) {
+                        onTextChange("")
+                    } else {
                         onCloseCLicked()
-                    }
-                    when (trailingIconState) {
-                        TrailingIconState.READY_TO_DELETE -> {
-                            onTextChange("")
-                            trailingIconState = TrailingIconState.READY_TO_CLOSE
-                        }
-                        TrailingIconState.READY_TO_CLOSE -> {
-                            if (text.isNotEmpty()) {
-                                onTextChange("")
-                            } else {
-                                onCloseCLicked()
-                                trailingIconState = TrailingIconState.READY_TO_DELETE
-                            }
-                        }
                     }
                 }) {
                     Icon(
